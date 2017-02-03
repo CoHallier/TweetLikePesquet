@@ -94,6 +94,7 @@ var myIcon = L.icon({
               var str=ajax.responseText;
               var jsonObj = JSON.parse(str);
               var result = iss.getInfos(jsonObj);
+              // Test : If marker already exists, we delete it and create a new one
               L.marker([result.lat, result.long], {icon:myIcon}).addTo(map)
               .bindPopup("ISS")
               .openPopup();
