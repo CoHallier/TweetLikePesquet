@@ -4,7 +4,7 @@ window.onload=function(){
 
 
     L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    attribution: 'Tiles &copy; Esri',
     }).addTo(map);
 
 	var iss = {
@@ -27,11 +27,6 @@ window.onload=function(){
 	var marqueurs=L.layerGroup()
 		.addTo(map);
 		
-	var pointList = new Array();
-	//en global ça ne marche pas :'(
-	//var polyline = new L.polyline(pointList, {color: 'red',weight: '3'});
-	//map.addLayer(polyline);
-	
 		
 	ajaxIss();
 
@@ -49,21 +44,15 @@ window.onload=function(){
               var str=ajax.responseText;
               var jsonObj = JSON.parse(str);
               var result = iss.getInfos(jsonObj);
-              //gestion des marqueurs
+              //If marker already exists, we delete it and create a new one (idea)
               marqueurs.clearLayers();
               L.marker([result.lat, result.long], {icon:myIcon})
               .addTo(marqueurs)
               .bindPopup("ISS")
               .openPopup();
-              //création de la ligne de déplacement de l'iss
-              var point = new L.LatLng(result.lat,result.long);
-              pointList.push(point);
-              var polyline = new L.polyline(pointList, {color: 'red',weight: '3'});
-              map.addLayer(polyline);
-              //affichage de la latitude et longitude
+              
               document.getElementById("lat").innerHTML = "Latitude : "+result.lat;
               document.getElementById("long").innerHTML = "Longitude : "+result.long;
-              //répétition de la fonction toutes les 5 secondes
               setTimeout(function() {ajaxIss ()},5000);
 
 			}
