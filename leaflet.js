@@ -27,9 +27,11 @@ window.onload=function(){
 	var marqueurs=L.layerGroup()
 		.addTo(map);
 		
-	var latlng; 
+	var pointList = new Array();
+	//en global ça ne marche pas :'(
+	//var polyline = new L.polyline(pointList, {color: 'red',weight: '3'});
+	//map.addLayer(polyline);
 	
-	//var polyline = L.polyline(latlng, {color: 'red'}).addTo(map);
 		
 	ajaxIss();
 
@@ -47,16 +49,21 @@ window.onload=function(){
               var str=ajax.responseText;
               var jsonObj = JSON.parse(str);
               var result = iss.getInfos(jsonObj);
-              //If marker already exists, we delete it and create a new one (idea)
+              //gestion des marqueurs
               marqueurs.clearLayers();
               L.marker([result.lat, result.long], {icon:myIcon})
               .addTo(marqueurs)
               .bindPopup("ISS")
               .openPopup();
-              latlng.concat(L.latLng(result.lat, result.long));
-              
+              //création de la ligne de déplacement de l'iss
+              var point = new L.LatLng(result.lat,result.long);
+              pointList.push(point);
+              var polyline = new L.polyline(pointList, {color: 'red',weight: '3'});
+              map.addLayer(polyline);
+              //affichage de la latitude et longitude
               document.getElementById("lat").innerHTML = "Latitude : "+result.lat;
               document.getElementById("long").innerHTML = "Longitude : "+result.long;
+              //répétition de la fonction toutes les 5 secondes
               setTimeout(function() {ajaxIss ()},5000);
 
 			}
