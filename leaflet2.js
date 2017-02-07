@@ -3,12 +3,8 @@ window.onload=function(){
     var map = L.map('map').setView([51, -0.09], 1.5);
 
 
-<<<<<<< HEAD
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-=======
     L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
->>>>>>> a946951d1540eb9be7d5ce88135a7c41c4994576
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    attribution: 'Tiles &copy; Esri',
     }).addTo(map);
 
 	var iss = {
@@ -22,11 +18,7 @@ window.onload=function(){
 	};
 
 	var myIcon = L.icon({
-<<<<<<< HEAD
-	  iconUrl: 'icone_astronaute.gif',
-=======
 	  iconUrl: 'navette.png',
->>>>>>> a946951d1540eb9be7d5ce88135a7c41c4994576
 	  iconSize: [29, 24],
 	  iconAnchor: [9, 21],
 	  popupAnchor: [0, -14]
@@ -35,11 +27,6 @@ window.onload=function(){
 	var marqueurs=L.layerGroup()
 		.addTo(map);
 		
-	var pointList = new Array();
-	//en global ça ne marche pas :'(
-	//var polyline = new L.polyline(pointList, {color: 'red',weight: '3'});
-	//map.addLayer(polyline);
-	
 		
 	ajaxIss();
 
@@ -57,21 +44,15 @@ window.onload=function(){
               var str=ajax.responseText;
               var jsonObj = JSON.parse(str);
               var result = iss.getInfos(jsonObj);
-              //gestion des marqueurs
+              //If marker already exists, we delete it and create a new one (idea)
               marqueurs.clearLayers();
               L.marker([result.lat, result.long], {icon:myIcon})
               .addTo(marqueurs)
               .bindPopup("ISS")
               .openPopup();
-              //création de la ligne de déplacement de l'iss
-              var point = new L.LatLng(result.lat,result.long);
-              pointList.push(point);
-              var polyline = new L.polyline(pointList, {color: 'red',weight: '3'});
-              map.addLayer(polyline);
-              //affichage de la latitude et longitude
+              
               document.getElementById("lat").innerHTML = "Latitude : "+result.lat;
               document.getElementById("long").innerHTML = "Longitude : "+result.long;
-              //répétition de la fonction toutes les 5 secondes
               setTimeout(function() {ajaxIss ()},5000);
 
 			}
